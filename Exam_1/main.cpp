@@ -168,7 +168,7 @@ void selection_done()
 
 void sampling()
 {
-    for(int i=0; i<200; i+=2){
+    for(int i=0; i<200; i+=1){
         printf("%f\r\n", ADCdata[i]);
         ThisThread::sleep_for(5ms);
     }
