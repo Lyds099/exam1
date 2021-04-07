@@ -14,13 +14,13 @@ AnalogIn Ain(A0);
 
 static int choose_freq = 0;//0--4
 static int set_freq = 0;
-static int frequency = 20;
+static int frequency = 1;
 static int freq_change = 1;
 static int freq_set = 0;
 
 float ADCdata[250];
 int sample_i;
-int sample_rate = 400;
+int sample_rate = 200;
 
 EventQueue G_Queue;
 EventQueue S_Queue;
@@ -56,7 +56,6 @@ void flip_up()
             choose_freq--;
         }
         freq_change = 1;
-    display_freq();
 }
 
 void flip_down()
@@ -65,7 +64,6 @@ void flip_down()
             choose_freq++;
         }
         freq_change = 1;
-    display_freq();
 }
 
 void generation()
@@ -160,7 +158,6 @@ void selection_done()
     else if(choose_freq==2) frequency = 4;
     else if(choose_freq==3) frequency = 8;
     freq_set = 1;
-    display_freq();
     
     G_Queue.call(&generation);
 }
@@ -190,5 +187,8 @@ int main()
     down_button.rise(&flip_down);
     confirm_button.rise(&selection_done);
     mypin.rise(&press_userbutton);
-   
+
+    while(1){
+        display_freq();
+    }
 }
