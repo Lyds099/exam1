@@ -22,6 +22,8 @@ float ADCdata[250];
 int sample_i;
 int sample_rate = 200;
 
+Thread g_Thread(osPriorityLow);
+Thread s_Thread(osPriorityNormal);
 EventQueue G_Queue;
 EventQueue S_Queue;
 
@@ -69,10 +71,10 @@ void flip_down()
 void generation()
 {
   while(1){
-    if(frequency==8){
+    if(frequency==1){
             sample_i = 0;
             for (int p=0; p<5; p++){
-                for (float i = 0.0f; i < 1.0f; i += (1.0f/16.0f)) {
+                for (float i = 0.0f; i < 1.0f; i += 0.0625f) {
                     Aout = i*0.92;
                     ADCdata[sample_i++] = Ain;
                     ThisThread::sleep_for(5ms);
@@ -82,27 +84,7 @@ void generation()
                     ADCdata[sample_i++] = Ain;
                     ThisThread::sleep_for(5ms);
                 }//80
-                for (float i = 1.0f; i > 0.0f; i -= (1.0f/16.0f)) {
-                    Aout = i*0.92;
-                    ADCdata[sample_i++] = Ain;
-                    ThisThread::sleep_for(5ms);
-                }
-            }
-        }
-    else if(frequency==4){
-            sample_i = 0;
-            for (int p=0; p<5; p++){
-                for (float i = 0.0f; i < 1.0f; i += (1.0f/8.0f)) {
-                    Aout = i*0.92;
-                    ADCdata[sample_i++] = Ain;
-                    ThisThread::sleep_for(5ms);
-                }
-                Aout = 0.92;
-                for(int j=0; j<32; j++){
-                    ADCdata[sample_i++] = Ain;
-                    ThisThread::sleep_for(5ms);
-                }//160
-                for (float i = 1.0f; i > 0.0f; i -= (1.0f/8.0f)) {
+                for (float i = 1.0f; i > 0.0f; i -= 0.0625f) {
                     Aout = i*0.92;
                     ADCdata[sample_i++] = Ain;
                     ThisThread::sleep_for(5ms);
@@ -112,7 +94,27 @@ void generation()
     else if(frequency==2){
             sample_i = 0;
             for (int p=0; p<5; p++){
-                for (float i = 0.0f; i < 1.0f; i += (1.0f/4.0f)) {
+                for (float i = 0.0f; i < 1.0f; i += 0.125f) {
+                    Aout = i*0.92;
+                    ADCdata[sample_i++] = Ain;
+                    ThisThread::sleep_for(5ms);
+                }
+                Aout = 0.92;
+                for(int j=0; j<32; j++){
+                    ADCdata[sample_i++] = Ain;
+                    ThisThread::sleep_for(5ms);
+                }//160
+                for (float i = 1.0f; i > 0.0f; i -= 0.125f) {
+                    Aout = i*0.92;
+                    ADCdata[sample_i++] = Ain;
+                    ThisThread::sleep_for(5ms);
+                }
+            }
+        }
+    else if(frequency==4){
+            sample_i = 0;
+            for (int p=0; p<5; p++){
+                for (float i = 0.0f; i < 1.0f; i += 0.25f) {
                     Aout = i*0.92;
                     ADCdata[sample_i++] = Ain;
                     ThisThread::sleep_for(5ms);
@@ -122,17 +124,17 @@ void generation()
                     ADCdata[sample_i++] = Ain;
                     ThisThread::sleep_for(5ms);
                 }//200
-                for (float i = 1.0f; i > 0.0f; i -= (1.0f/4.0f)) {
+                for (float i = 1.0f; i > 0.0f; i -= 0.25f) {
                     Aout = i*0.92;
                     ADCdata[sample_i++] = Ain;
                     ThisThread::sleep_for(5ms);
                 }
             }
         }
-    else if(frequency==1){
+    else if(frequency==8){
             sample_i = 0;
             for (int p=0; p<5; p++){
-                for (float i = 0.0f; i < 1.0f; i += (1.0f/2.0f)) {
+                for (float i = 0.0f; i < 1.0f; i += 0.5f) {
                     Aout = i*0.92;
                     ADCdata[sample_i++] = Ain;
                     ThisThread::sleep_for(5ms);
@@ -142,7 +144,7 @@ void generation()
                     ADCdata[sample_i++] = Ain;
                     ThisThread::sleep_for(5ms);
                 }//220
-                for (float i = 1.0f; i > 0.0f; i -= (1.0f/2.0f)) {
+                for (float i = 1.0f; i > 0.0f; i -= 0.5f) {
                     Aout = i*0.92;
                     ADCdata[sample_i++] = Ain;
                     ThisThread::sleep_for(5ms);
@@ -179,10 +181,7 @@ void press_userbutton()
 
 int main()
 {
-    Thread g_Thread(osPriorityLow);
     g_Thread.start(callback(&G_Queue, &EventQueue::dispatch_forever));
-
-    Thread s_Thread(osPriorityNormal);
     s_Thread.start(callback(&S_Queue, &EventQueue::dispatch_forever));
     
     up_button.rise(&flip_up);
