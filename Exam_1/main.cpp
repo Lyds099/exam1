@@ -68,6 +68,7 @@ void flip_down()
 
 void generation()
 {
+  while(1){
     if(frequency==8){
             sample_i = 0;
             for (int p=0; p<5; p++){
@@ -148,6 +149,7 @@ void generation()
                 }
             }
         }
+  }
 }
 
 void selection_done()
@@ -166,7 +168,7 @@ void sampling()
 {
     for(int i=0; i<200; i+=2){
         printf("%f\r\n", ADCdata[i]);
-        ThisThread::sleep_for(10ms);
+        ThisThread::sleep_for(5ms);
     }
 }
 
