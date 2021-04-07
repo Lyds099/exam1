@@ -70,88 +70,95 @@ void flip_down()
 
 void generation()
 {
-  while(1){
     if(frequency==1){
+        while(1){
             sample_i = 0;
             for (int p=0; p<5; p++){
-                for (float i = 0.0f; i < 1.0f; i += 0.0625f) {
-                    Aout = i*0.92;
+                for (float i = 0; i < 16; i += 1) {
+                    Aout = i*0.0625*0.92;
                     ADCdata[sample_i++] = Ain;
-                    ThisThread::sleep_for(5ms);
+                    wait_us(5000);
                 }
                 Aout = 0.92;
                 for(int j=0; j<16; j++){
                     ADCdata[sample_i++] = Ain;
-                    ThisThread::sleep_for(5ms);
+                    wait_us(5000);
                 }//80
-                for (float i = 1.0f; i > 0.0f; i -= 0.0625f) {
-                    Aout = i*0.92;
+                for (float i = 16; i > 0; i -= 1) {
+                    Aout = i*0.0625*0.92;
                     ADCdata[sample_i++] = Ain;
-                    ThisThread::sleep_for(5ms);
+                    wait_us(5000);
                 }
             }
         }
+    }
     else if(frequency==2){
+        while(1){
             sample_i = 0;
             for (int p=0; p<5; p++){
-                for (float i = 0.0f; i < 1.0f; i += 0.125f) {
-                    Aout = i*0.92;
+                for (float i = 0; i < 8; i += 1) {
+                    Aout = i*0.125*0.92;
                     ADCdata[sample_i++] = Ain;
-                    ThisThread::sleep_for(5ms);
+                    wait_us(5000);
                 }
                 Aout = 0.92;
                 for(int j=0; j<32; j++){
                     ADCdata[sample_i++] = Ain;
-                    ThisThread::sleep_for(5ms);
+                    wait_us(5000);
                 }//160
-                for (float i = 1.0f; i > 0.0f; i -= 0.125f) {
-                    Aout = i*0.92;
+                for (float i = 8; i > 0; i -= 1) {
+                    Aout = i*0.125*0.92;
                     ADCdata[sample_i++] = Ain;
-                    ThisThread::sleep_for(5ms);
+                    wait_us(5000);
                 }
             }
         }
+    }
     else if(frequency==4){
+        while(1){
             sample_i = 0;
             for (int p=0; p<5; p++){
-                for (float i = 0.0f; i < 1.0f; i += 0.25f) {
-                    Aout = i*0.92;
+                for (float i = 0; i < 4; i += 1) {
+                    Aout = i*0.25*0.92;
                     ADCdata[sample_i++] = Ain;
-                    ThisThread::sleep_for(5ms);
+                    wait_us(5000);
                 }
                 Aout = 0.92;
                 for(int j=0; j<40; j++){
                     ADCdata[sample_i++] = Ain;
-                    ThisThread::sleep_for(5ms);
+                    wait_us(5000);
                 }//200
-                for (float i = 1.0f; i > 0.0f; i -= 0.25f) {
-                    Aout = i*0.92;
+                for (float i = 4; i > 0; i -= 1) {
+                    Aout = i*0.25*0.92;
                     ADCdata[sample_i++] = Ain;
-                    ThisThread::sleep_for(5ms);
+                    wait_us(5000);
                 }
             }
         }
+    }
     else if(frequency==8){
+        while(1){
             sample_i = 0;
             for (int p=0; p<5; p++){
-                for (float i = 0.0f; i < 1.0f; i += 0.5f) {
-                    Aout = i*0.92;
+                for (float i = 0; i < 2; i += 1) {
+                    Aout = i*0.5*0.92;
                     ADCdata[sample_i++] = Ain;
-                    ThisThread::sleep_for(5ms);
+                    wait_us(5000);
                 }
                 Aout = 0.92;
                 for(int j=0; j<44; j++){
                     ADCdata[sample_i++] = Ain;
-                    ThisThread::sleep_for(5ms);
+                    wait_us(5000);
                 }//220
-                for (float i = 1.0f; i > 0.0f; i -= 0.5f) {
-                    Aout = i*0.92;
+                for (float i = 2; i > 0; i -= 1) {
+                    Aout = i*0.5*0.92;
                     ADCdata[sample_i++] = Ain;
-                    ThisThread::sleep_for(5ms);
+                    wait_us(5000);
                 }
             }
         }
-  }
+    }
+  
 }
 
 void selection_done()
