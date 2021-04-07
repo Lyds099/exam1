@@ -7,7 +7,7 @@
 &emsp;&emsp;(6)Execute the Python script: $ sudo python3 FFT.py and press the user button.
 
 2.what are the results 
-&emsp;&emsp;Picoscope: https://github.com/Lyds099/exam1/blob/master/Screen%20Shot%202021-04-07%20at%206.27.36%20PM.png?raw=true 
+&emsp;&emsp;Picoscope: https://github.com/Lyds099/exam1/blob/master/Screen%20Shot%202021-04-07%20at%206.27.36%20PM.png?raw=true  
 &emsp;&emsp;waveform 1: https://github.com/Lyds099/exam1/blob/master/1:1.png?raw=true  
 &emsp;&emsp;waveform 1/2: https://github.com/Lyds099/exam1/blob/master/1:2.png?raw=true  
 &emsp;&emsp;waveform 1/4: https://github.com/Lyds099/exam1/blob/master/1:4.png?raw=true  
