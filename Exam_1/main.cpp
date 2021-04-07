@@ -70,8 +70,8 @@ void flip_down()
 
 void generation()
 {
+    while(1){
     if(frequency==1){
-        while(1){
             sample_i = 0;
             for (int p=0; p<5; p++){
                 for (float i = 0; i < 16; i += 1) {
@@ -90,10 +90,8 @@ void generation()
                     wait_us(5000);
                 }
             }
-        }
     }
     else if(frequency==2){
-        while(1){
             sample_i = 0;
             for (int p=0; p<5; p++){
                 for (float i = 0; i < 8; i += 1) {
@@ -112,10 +110,8 @@ void generation()
                     wait_us(5000);
                 }
             }
-        }
     }
     else if(frequency==4){
-        while(1){
             sample_i = 0;
             for (int p=0; p<5; p++){
                 for (float i = 0; i < 4; i += 1) {
@@ -134,10 +130,8 @@ void generation()
                     wait_us(5000);
                 }
             }
-        }
     }
     else if(frequency==8){
-        while(1){
             sample_i = 0;
             for (int p=0; p<5; p++){
                 for (float i = 0; i < 2; i += 1) {
@@ -156,9 +150,8 @@ void generation()
                     wait_us(5000);
                 }
             }
-        }
     }
-  
+    }
 }
 
 void selection_done()
@@ -169,6 +162,7 @@ void selection_done()
     else if(choose_freq==2) frequency = 4;
     else if(choose_freq==3) frequency = 8;
     freq_set = 1;
+    
     
     G_Queue.call(&generation);
 }
