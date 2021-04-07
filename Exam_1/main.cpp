@@ -1,5 +1,7 @@
 #include "mbed.h"
 #include "uLCD_4DGL.h"
+#include "mbed_events.h"
+using namespace std::chrono;
 
 uLCD_4DGL uLCD(D1, D0, D2);
 //DigitalIn up_button(D4);
@@ -23,8 +25,8 @@ float ADCdata[250];
 int sample_i;
 int sample_rate = 400;
 
-Thread t;
-EventQueue queue(32 * EVENTS_EVENT_SIZE);
+EventQueue G_Queue;
+EventQueue S_Queue;
 
 void flip_up()
 {
@@ -32,6 +34,7 @@ void flip_up()
             choose_freq--;
         }
         freq_change = 1;
+    display_freq();
 }
 
 void flip_down()
@@ -40,6 +43,7 @@ void flip_down()
             choose_freq++;
         }
         freq_change = 1;
+    display_freq();
 }
 
 void selection_done()
@@ -50,8 +54,9 @@ void selection_done()
     else if(choose_freq==2) frequency = 4;
     else if(choose_freq==3) frequency = 8;
     freq_set = 1;
-
-    queue.call(generation);
+    display_freq();
+    
+    G_Queue.call(generation);
 }
 
 void generation()
@@ -140,7 +145,7 @@ void generation()
 
 void press_userbutton()
 {
-    queue.call(sampling);
+    S_Queue.call(sampling);
 }
 
 void sampling()
@@ -151,28 +156,7 @@ void sampling()
     }
 }
 
-void check_button(){//discard
-    if(up_button){
-        if(choose_freq>0){
-            choose_freq--;
-        }
-        freq_change = 1;
-    }else if(down_button){
-        if(choose_freq<3){
-            choose_freq++;
-        }
-        freq_change = 1;
-    }else if(confirm_button){
-        set_freq = choose_freq;
-        if(choose_freq==0) frequency = 1;
-        else if(choose_freq==1) frequency = 2;
-        else if(choose_freq==2) frequency = 4;
-        else if(choose_freq==3) frequency = 8;
-        freq_set = 1;
-    }
-}
-
-void display_freq(){//discard
+void display_freq(){
     if(freq_change || freq_set){
         uLCD.cls();
         uLCD.text_width(2);
@@ -181,15 +165,16 @@ void display_freq(){//discard
         uLCD.color(WHITE);
         uLCD.locate(2,1);
         uLCD.printf("Menu");
-        for(int i=0; i<3; i++){
+        for(int i=0; i<4; i++){
             if(freq_change && choose_freq==i) uLCD.textbackground_color(0x00CC66);
             else if(freq_set && set_freq==i) uLCD.textbackground_color(0x3333FF);
             else uLCD.textbackground_color(BLACK);
             uLCD.locate(2,2+i);
-            if(i==0) uLCD.printf("%d",20);
-            else if(i==1) uLCD.printf("%d",40);
-            else if(i==2) uLCD.printf("%d",100);
-            uLCD.printf("Hz");
+            if(i==0) uLCD.printf("1");
+            else if(i==1) uLCD.printf("1/2");
+            else if(i==2) uLCD.printf("1/4");
+            else if(i==3) uLCD.printf("1/8");
+            uLCD.printf("rate");
         }
         freq_change = 0;
         freq_set = 0;
@@ -198,80 +183,15 @@ void display_freq(){//discard
 
 int main()
 {
-    t.start(callback(&queue, &EventQueue::dispatch_forever));
+    Thread g_Thread(osPriorityLow);
+    g_Thread.start(callback(&G_Queue, &EventQueue::dispatch_forever));
+
+    Thread s_Thread(osPriorityNormal);
+    s_Thread.start(callback(&S_Queue, &EventQueue::dispatch_forever));
+    
     up_button.rise(&flip_up);
     down_button.rise(&flip_down);
     confirm_button.rise(&selection_done);
     mypin.rise(&press_userbutton);
-
-    // while(1){
-    //     if(!mypin) break;
-    //     check_button();
-    //     display_freq();
-    //     int period = 1000000/frequency;//set freq
-    //     int T = period/20;
-    //     if(frequency==20){
-    //         sample_i = 0;
-    //         for (int p=0; p<20; p++){
-    //             for (float i = 0.0f; i < 1.0f; i += 0.1f) {
-    //                 Aout = i*0.92;
-    //                 ADCdata[sample_i++] = Ain;
-    //                 wait_us(T);
-    //             }
-    //             for (float i = 1.0f; i > 0.0f; i -= 0.1f) {
-    //                 Aout = i*0.92;
-    //                 ADCdata[sample_i++] = Ain;
-    //                 wait_us(T);
-    //             }
-    //         }
-    //     }
-    //     else if(frequency==40){
-    //         sample_i = 0;
-    //         for (int p=0; p<40; p++){
-    //             for (float i = 0.0f; i < 1.0f; i += 0.1f) {
-    //                 Aout = i*0.92;
-    //                 ADCdata[sample_i++] = Ain;
-    //                 wait_us(T);
-    //             }
-    //             for (float i = 1.0f; i > 0.0f; i -= 0.1f) {
-    //                 Aout = i*0.92;  
-    //                 ADCdata[sample_i++] = Ain;
-    //                 wait_us(T);
-    //             }
-    //         }
-    //     }
-    //     else if(frequency==100){
-    //         sample_i = 0;
-    //         for (int p=0; p<100; p++){
-    //             for (float i = 0.0f; i < 1.0f; i += 0.1f) {
-    //                 Aout = i*0.92;
-    //                 ADCdata[sample_i++] = Ain;
-    //                 wait_us(T);
-    //             }
-    //             for (float i = 1.0f; i > 0.0f; i -= 0.1f) {
-    //                 Aout = i*0.92;
-    //                 ADCdata[sample_i++] = Ain;
-    //                 wait_us(T);
-    //             }
-    //         }
-    //     }
-    // }
-    // if(frequency==20){
-    //     for(int i=0; i<400; i++){
-    //         printf("%f\r\n", ADCdata[i]);
-    //         ThisThread::sleep_for(10ms);
-    //     }
-    // }
-    // else if(frequency==40){
-    //     for(int i=0; i<800; i+=2){
-    //         printf("%f\r\n", ADCdata[i]);
-    //         ThisThread::sleep_for(10ms);
-    //     }
-    // }
-    // else if(frequency==100){
-    //     for(int i=0; i<2000; i+=5){
-    //         printf("%f\r\n", ADCdata[i]);
-    //         ThisThread::sleep_for(10ms);
-    //     }
-    // }
+   
 }
