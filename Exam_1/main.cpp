@@ -18,7 +18,7 @@ static int frequency = 1;
 static int freq_change = 1;
 static int freq_set = 0;
 
-float ADCdata[250];
+float ADCdata[300];
 int sample_i;
 int sample_rate = 200;
 
