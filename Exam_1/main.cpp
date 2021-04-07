@@ -256,22 +256,22 @@ int main()
     //         }
     //     }
     // }
-    if(frequency==20){
-        for(int i=0; i<400; i++){
-            printf("%f\r\n", ADCdata[i]);
-            ThisThread::sleep_for(10ms);
-        }
-    }
-    else if(frequency==40){
-        for(int i=0; i<800; i+=2){
-            printf("%f\r\n", ADCdata[i]);
-            ThisThread::sleep_for(10ms);
-        }
-    }
-    else if(frequency==100){
-        for(int i=0; i<2000; i+=5){
-            printf("%f\r\n", ADCdata[i]);
-            ThisThread::sleep_for(10ms);
-        }
-    }
+    // if(frequency==20){
+    //     for(int i=0; i<400; i++){
+    //         printf("%f\r\n", ADCdata[i]);
+    //         ThisThread::sleep_for(10ms);
+    //     }
+    // }
+    // else if(frequency==40){
+    //     for(int i=0; i<800; i+=2){
+    //         printf("%f\r\n", ADCdata[i]);
+    //         ThisThread::sleep_for(10ms);
+    //     }
+    // }
+    // else if(frequency==100){
+    //     for(int i=0; i<2000; i+=5){
+    //         printf("%f\r\n", ADCdata[i]);
+    //         ThisThread::sleep_for(10ms);
+    //     }
+    // }
 }
